@@ -18,13 +18,16 @@
 	[Block Devices](M0Bah.md#block-devs)
 
 # GroupX
-  [Char Drivers](Su0UD.md)
-  [The Design of scull](Su0UD.md#scull-design)
-  [Major and Minor Numbers](Su0UD.md#major-minor-nums)
-  [The Internal Representaion of Device Numbers](Su0UD.md#dev-nums-impl)
-  [Allocating and Freeing Device Numbers](Su0UD.md#alloc-free-dev-nums)
-  [Dynamic Allocation of Major Numbers](Su0UD.md#major-nums-dyn-alloc)
-  - [ ] [alloc/register chdrdev region](mods/scull/chd1.c#block1)
+
+Information:
+1. [Char Drivers](Su0UD.md)
+2. [The Design of scull](Su0UD.md#scull-design)
+3. [Major and Minor Numbers](Su0UD.md#major-minor-nums)
+4. [The Internal Representaion of Device Numbers](Su0UD.md#dev-nums-impl)
+5. [Allocating and Freeing Device Numbers](Su0UD.md#alloc-free-dev-nums)
+6. [Dynamic Allocation of Major Numbers](Su0UD.md#major-nums-dyn-alloc)
+Implementaion:
+- [ ] [alloc/register chdrdev region](mods/scull/chd1.c#block1)
 
 # GroupX
 	[The Linux Device Model](gK9vS.md)
