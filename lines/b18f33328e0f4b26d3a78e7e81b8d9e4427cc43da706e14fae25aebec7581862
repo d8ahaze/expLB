@@ -1,0 +1,1 @@
+The difference between char device and block device is that char device is just the data channel, which could be sequentially accessed, but block device is the random-access device.
