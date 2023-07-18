@@ -1,5 +1,4 @@
-*Char Drivers*
-[remote](https://static.lwn.net/images/pdf/LDD3/ch03.pdf)
+# *Char Drivers*
 ---
 
 The goal of this chapter is to write a complete char device driver.
@@ -264,23 +263,10 @@ The init script `scull.init` doesn’t accept driver options on the command line
 
 Here’s the code we use in scull’s source to get a major number:
 
-<a name="major-nums-dyn-alloc-b1"></a>
-[src](mods/scull/chd1.c)
-<iframe src="block/zxcasdqwe.html"></iframe>
-
+```c
+blocks/3c2a74866096bab3a24a2c50b0c722400ad65af4d8d0a8998c2c21ea9bc676e0
 ```
-if (scull_major) {
-dev = MKDEV(scull_major, scull_minor);
-result = register_chrdev_region(dev, scull_nr_devs, "scull");
-} else {
-result = alloc_chrdev_region(&dev, scull_minor, scull_nr_devs,
-"scull");
-scull_major = MAJOR(dev);
-}
-if (result < 0) {
-printk(KERN_WARNING "scull: can't get major %d\n", scull_major);
-return result;
-}
+
 ```
 
 Almost all of the sample drivers used in this book use similar code for their major
@@ -1464,10 +1450,4 @@ unsigned long copy_to_user (void *to, const void *from, unsigned long count);
 
 Copy data between user space and kernel space.
 
-72 |
-
-Chapter 3: Char Drivers
-This is the Title of the Book, eMatter Edition
-Copyright © 2005 O’Reilly & Associates, Inc. All rights reserved.
-
-
+[base](https://static.lwn.net/images/pdf/LDD3/ch03.pdf)

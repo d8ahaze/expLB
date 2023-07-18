@@ -1,23 +1,29 @@
-# My Lines
+## My Lines
 
 [The difference between char device and block device](lines/b18f33328e0f4b26d3a78e7e81b8d9e4427cc43da706e14fae25aebec7581862)
 
-# Building Linux kernel modules
-	[Building and Running Modules](uMc0D.txt)
+## Building Linux kernel modules
+1. [Building and Running Modules](uMc0D.txt)
 	- [x] [Setup development environemt](mods/setup/setup.md)
 	- [ ] [kvm](NONE)
 	- [ ] [Automate development environment setup](mods/setup/setup.sh)
 	- [ ] [Diff them to find the best one](NONE)
 
-# "Hello" Linux kernel module
-	- [-] [Implementaion](mods/hello/hello.c)
+## "Hello" Linux kernel module
+Information:
+1. [Building and Running Modules](uMc0D.txt)
 
-# GroupX
-	[An Introduction to Device Drivers](M0Bah.md)
-	[Character Devices](M0Bah.md#char-devs)
-	[Block Devices](M0Bah.md#block-devs)
+Implementaion:
+- [-] [zxc](mods/hello/hello.c)
 
-# GroupX
+## GroupX
+
+Information:
+1. [An Introduction to Device Drivers](M0Bah.md)
+2. [Character Devices](M0Bah.md#char-devs)
+3. [Block Devices](M0Bah.md#block-devs)
+
+## GroupX
 
 Information:
 1. [Char Drivers](Su0UD.md)
@@ -30,5 +36,5 @@ Information:
 Implementaion:
 - [ ] [alloc/register chdrdev region](mods/scull/chd1.c#block1)
 
-# GroupX
+## GroupX
 	[The Linux Device Model](gK9vS.md)
