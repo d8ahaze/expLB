@@ -26,7 +26,7 @@ static int scull_init(void)
 	dev_t dev = 0;
 	int result;
 
-	// block1	Su0UD.md#major-nums-dyn-alloc
+	// block1	Su0UD.md#dynamic-allocation-of-major-numbers
 	if (scull_major) {
 		dev = MKDEV(scull_major, scull_minor);					// lines/e4e3c12566d13de60eacbea610b71e74d95bf3cd93ac971885f3bfc4ad065273
 		result = register_chrdev_region(dev, scull_nr_devs, "scull");		// lines/eec4ef3cec7f52a2e0b2e575efa9f23b187230aff56f0ca2a0a2404141d12175
@@ -35,7 +35,7 @@ static int scull_init(void)
 		result = alloc_chrdev_region(&dev, scull_minor, scull_nr_devs,
 				"scull");
 		scull_major = MAJOR(dev);
-		printk(KERN_ALERT "Scull major number: %d\n", scull_major);
+		printk(KERN_ALERT "Major %d, Minor: %d\n", scull_major, scull_minor);
 	}
 	if (result < 0) {
 		printk(KERN_WARNING "scull: can't get major %d\n", scull_major);	// lines/
