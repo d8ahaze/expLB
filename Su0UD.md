@@ -14,7 +14,7 @@ scull just acts on some memory, allocated from the kernel.
 Anyone can compile and run scull, and scull is portable across the computer architectures on which Linux runs.
 On the other hand, the device doesn’t do anything "useful" other than demonstrate the interface between the kernel and char drivers and allow the user to run some tests.
 
-## The Design of scull
+## SCT1. The Design of scull
 
 The first step of driver writing is defining the capabilities (the mechanism) the driver will offer to user programs.
 Since our "device" is part of the computer’s memory, we’re free to do what we want with it.
@@ -50,7 +50,7 @@ advanced devices are covered in Chapter 6. scullpipe is described in the section
 Blocking I/O Example,” and the others are described in “Access Control on a Device
 File.”
 
-## Major and Minor Numbers
+## SCT2. Major and Minor Numbers
 
 Char devices are accessed through names in the filesystem.
 Those names are called special files or device files or simply nodes of the filesystem tree; they are conventionally located in the `/dev` directory.
@@ -85,7 +85,7 @@ The minor number is used by the kernel to determine exactly which device is bein
 Depending on how your driver is written (as we will see below), you can either get a direct pointer to your device from the kernel, or you can use the minor number yourself as an index into a local array of devices.
 Either way, the kernel itself knows almost nothing about minor numbers beyond the fact that they refer to devices implemented by your driver.
 
-## The Internal Representation of Device Numbers
+### SCT21. The Internal Representation of Device Numbers
 
 Within the kernel, the `dev_t` type (defined in `<linux/types.h>`) is used to hold device numbers -- both the major and minor parts.
 As of Version 6.4.0 of the kernel, `dev_t` is a 32-bit (`u32`) quantity with 12 bits set aside for the major number and 20 for the minor number.
@@ -107,7 +107,7 @@ Note that the 2.6 kernel can accommodate a vast number of devices, while previou
 One assumes that the wider range will be sufficient for quite some time, but the computing field is littered with erroneous assumptions of that nature.
 So you should expect that the format of `dev_t` could change again in the future; if you write your drivers carefully, however, these changes will not be a problem.
 
-## Allocating and Freeing Device Numbers
+### SCT22. Allocating and Freeing Device Numbers
 
 One of the first things your driver will need to do when setting up a char device is to obtain one or more device numbers to work with.
 The necessary function for this task is `register_chrdev_region`, which is declared in `<linux/fs.h>`:
@@ -150,7 +150,7 @@ The above functions allocate device numbers for your driver’s use, but they do
 Before a user-space program can access one of those device numbers, your driver needs to connect them to its internal functions that implement the device’s operations.
 We will describe how this connection is accomplished shortly, but there are a couple of necessary digressions to take care of first.
 
-## Dynamic Allocation of Major Numbers
+### SCT23. Dynamic Allocation of Major Numbers
 
 Some major device numbers are statically assigned to the most common devices.
 A list of those devices can be found in Documentation/devices.txt within the kernel source tree.
@@ -257,7 +257,7 @@ The init script `scull.init` doesn’t accept driver options on the command line
 
 Here’s the code we use in scull’s source to get a major number:
 
-## [block1](locks/3c2a74866096bab3a24a2c50b0c722400ad65af4d8d0a8998c2c21ea9bc676e0)
+### SCT24. Usage Example [block1](mods/scull/chd1.c#block1)
 ```c
 if (scull_major) {
 	dev = MKDEV(scull_major, scull_minor);
@@ -277,8 +277,8 @@ Almost all of the sample drivers used in this book use similar code for their ma
 
 ## Some Important Data Structures
 
-As you can imagine, device number registration is just the first of many tasks that
-driver code must carry out. We will soon look at other important driver components, but one other digression is needed first. Most of the fundamental driver operations involve three important kernel data structures, called file_operations, file,
+As you can imagine, device number registration is just the first of many tasks that driver code must carry out.
+We will soon look at other important driver components, but one other digression is needed first. Most of the fundamental driver operations involve three important kernel data structures, called file_operations, file,
 and inode. A basic familiarity with these structures is required to be able to do much
 of anything interesting, so we will now take a quick look at each of them before getting into the details of how to implement the fundamental driver operations.
 

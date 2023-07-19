@@ -28,12 +28,14 @@ Information:
 Information:
 1. [Char Drivers](Su0UD.md)
 2. [The Design of scull](Su0UD.md#the-design-of-scull)
-3. [Major and Minor Numbers](Su0UD.md#major-and-minor-numbers)
-4. [The Internal Representaion of Device Numbers](Su0UD.md#dev-nums-impl)
-5. [Allocating and Freeing Device Numbers](Su0UD.md#allocating-and-freeing-device-numbers)
-6. [Dynamic Allocation of Major Numbers](Su0UD.md#dynamic-allocation-of-major-numbers)
 
-Implementaion:
+## Device numbers
+
+- [Major and Minor Numbers](Su0UD.md#major-and-minor-numbers)
+- [The Internal Representaion of Device Numbers](Su0UD.md#dev-nums-impl)
+- [Allocating and Freeing Device Numbers](Su0UD.md#allocating-and-freeing-device-numbers)
+- [Dynamic Allocation of Major Numbers](Su0UD.md#dynamic-allocation-of-major-numbers)
+
 - [ ] [alloc/register chdrdev region](mods/scull/chd1.c#block1)
 
 ## GroupX
