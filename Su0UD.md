@@ -1,5 +1,4 @@
 # *Char Drivers*
----
 
 The goal of this chapter is to write a complete char device driver.
 We develop a character driver because this class is suitable for most simple hardware devices.
@@ -264,7 +263,7 @@ The init script `scull.init` doesn’t accept driver options on the command line
 Here’s the code we use in scull’s source to get a major number:
 
 ```c
-blocks/3c2a74866096bab3a24a2c50b0c722400ad65af4d8d0a8998c2c21ea9bc676e0
+# blocks/3c2a74866096bab3a24a2c50b0c722400ad65af4d8d0a8998c2c21ea9bc676e0
 ```
 
 ```
