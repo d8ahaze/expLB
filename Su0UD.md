@@ -354,6 +354,7 @@ struct file_operations {
 } __randomize_layout;
 ```
 
+[check-ref](#d74c77bf5b4cc61372c8a1035f6185b03e9f614c389e9ad20357f61e3ad2aab0)
 
 `loff_t (*llseek) (struct file *, loff_t, int);`
 
@@ -517,7 +518,7 @@ scull_open,
 This declaration uses the standard C tagged structure initialization syntax. This syntax is preferred because it makes drivers more portable across changes in the definitions of the structures and, arguably, makes the code more compact and readable.
 Tagged initialization allows the reordering of structure members; in some cases, substantial performance improvements have been realized by placing pointers to frequently accessed members in the same hardware cache line.
 
-### The file Structure
+### SCT32. The file Structure
 
 `struct file`, defined in `<linux/fs.h>`, is the second most important data structure used in device drivers.
 Note that a file has nothing to do with the FILE pointers of user-space programs.
