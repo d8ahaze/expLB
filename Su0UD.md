@@ -526,8 +526,7 @@ A struct file, on the other hand, is a kernel structure that never appears in us
 
 The file structure represents an open file.
 <a id="d74c77bf5b4cc61372c8a1035f6185b03e9f614c389e9ad20357f61e3ad2aab0">
-It is not specific to device drivers; every open file in the system has an associated struct file in kernel space.
-</a>
+It is not specific to device drivers; every open file in the system has an associated struct file in kernel space. </a>
 It is created by the kernel on open and is passed to any function that operates on the file, until the last close.
 After all instances of the file are closed, the kernel releases the data structure.
 
