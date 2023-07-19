@@ -275,57 +275,89 @@ if (result < 0) {
 
 Almost all of the sample drivers used in this book use similar code for their major number assignment.
 
-## Some Important Data Structures
+## SCT3. Some Important Data Structures
 
 As you can imagine, device number registration is just the first of many tasks that driver code must carry out.
-We will soon look at other important driver components, but one other digression is needed first. Most of the fundamental driver operations involve three important kernel data structures, called file_operations, file,
-and inode. A basic familiarity with these structures is required to be able to do much
-of anything interesting, so we will now take a quick look at each of them before getting into the details of how to implement the fundamental driver operations.
+We will soon look at other important driver components, but one other digression is needed first.
+Most of the fundamental driver operations involve three important kernel data structures, called `file_operations`, `file`, and `inode`.
+A basic familiarity with these structures is required to be able to do much of anything interesting, so we will now take a quick look at each of them before getting into the details of how to implement the fundamental driver operations.
 
-File Operations
-So far, we have reserved some device numbers for our use, but we have not yet connected any of our driver’s operations to those numbers. The file_operations structure is how a char driver sets up this connection. The structure, defined in <linux/fs.h>,
-is a collection of function pointers. Each open file (represented internally by a file
-structure, which we will examine shortly) is associated with its own set of functions
-(by including a field called f_op that points to a file_operations structure). The
-operations are mostly in charge of implementing the system calls and are therefore,
-named open, read, and so on. We can consider the file to be an “object” and the
-functions operating on it to be its “methods,” using object-oriented programming
-terminology to denote actions declared by an object to act on itself. This is the first
-sign of object-oriented programming we see in the Linux kernel, and we’ll see more
-in later chapters.
-Conventionally, a file_operations structure or a pointer to one is called fops (or
-some variation thereof). Each field in the structure must point to the function in the
-driver that implements a specific operation, or be left NULL for unsupported operations. The exact behavior of the kernel when a NULL pointer is specified is different
-for each function, as the list later in this section shows.
-The following list introduces all the operations that an application can invoke on a
-device. We’ve tried to keep the list brief so it can be used as a reference, merely summarizing each operation and the default kernel behavior when a NULL pointer is used.
+### SCT31. File Operations
 
-Some Important Data Structures
-This is the Title of the Book, eMatter Edition
-Copyright © 2005 O’Reilly & Associates, Inc. All rights reserved.
+So far, we have reserved some device numbers for our use, but we have not yet connected any of our driver’s operations to those numbers.
+The `file_operations` structure is how a char driver sets up this connection.
+The structure, defined in `<linux/fs.h>`, is a collection of function pointers.
+Each open file (represented internally by a `file` structure) is associated with its own set of functions (by including a field called `f_op` that points to a `file_operations` structure).
+The operations are mostly in charge of implementing the system calls and are therefore, named `open`, `read`, and so on.
+We can consider the file to be an "object" and the functions operating on it to be its "methods", using object-oriented programming terminology to denote actions declared by an object to act on itself.
+This is the first sign of object-oriented programming we see in the Linux kernel, and we’ll see more in later chapters.
 
-|
+Conventionally, a `file_operations` structure or a pointer to one is called `fops` (or some variation thereof).
+Each field in the structure must point to the function in the driver that implements a specific operation, or be left NULL for unsupported operations.
+The exact behavior of the kernel when a NULL pointer is specified is different for each function, as the list later in this section shows.
 
-49
+The following list introduces all the operations that an application can invoke on a device.
+We’ve tried to keep the list brief so it can be used as a reference, merely summarizing each operation and the default kernel behavior when a NULL pointer is used.
 
-,ch03.22228 Page 50 Friday, January 21, 2005 1:32 PM
+In `file_operations` structure `write` method (pointer to function) has a parameter of type `const char __user *`.
+This annotation (attribute `__user`) is a form of documentation, noting that a pointer is a user-space address that cannot be directly dereferenced.
+For normal compilation, `__user` has no effect, but it can be used by external checking software to find misuse of user-space addresses.
 
-As you read through the list of file_operations methods, you will note that a number of parameters include the string __user. This annotation is a form of documentation, noting that a pointer is a user-space address that cannot be directly
-dereferenced. For normal compilation, __user has no effect, but it can be used by
-external checking software to find misuse of user-space addresses.
-The rest of the chapter, after describing some other important data structures,
-explains the role of the most important operations and offers hints, caveats, and real
-code examples. We defer discussion of the more complex operations to later chapters, because we aren’t ready to dig into topics such as memory management, blocking operations, and asynchronous notification quite yet.
-struct module *owner
-The first file_operations field is not an operation at all; it is a pointer to the
+The rest of the chapter, after describing some other important data structures, explains the role of the most important operations and offers hints, caveats, and real code examples.
+We defer discussion of the more complex operations to later chapters, because we aren’t ready to dig into topics such as memory management, blocking operations, and asynchronous notification quite yet.
 
-module that “owns” the structure. This field is used to prevent the module from
-being unloaded while its operations are in use. Almost all the time, it is simply
-initialized to THIS_MODULE, a macro defined in <linux/module.h>.
-loff_t (*llseek) (struct file *, loff_t, int);
+```c
+struct file_operations {
+	struct module *owner;
+	loff_t (*llseek) (struct file *, loff_t, int);
+	ssize_t (*read) (struct file *, char __user *, size_t, loff_t *);
+	ssize_t (*write) (struct file *, const char __user *, size_t, loff_t *);
+	ssize_t (*read_iter) (struct kiocb *, struct iov_iter *);
+	ssize_t (*write_iter) (struct kiocb *, struct iov_iter *);
+	int (*iopoll)(struct kiocb *kiocb, struct io_comp_batch *,
+			unsigned int flags);
+	int (*iterate) (struct file *, struct dir_context *);
+	int (*iterate_shared) (struct file *, struct dir_context *);
+	__poll_t (*poll) (struct file *, struct poll_table_struct *);
+	long (*unlocked_ioctl) (struct file *, unsigned int, unsigned long);
+	long (*compat_ioctl) (struct file *, unsigned int, unsigned long);
+	int (*mmap) (struct file *, struct vm_area_struct *);
+	unsigned long mmap_supported_flags;
+	int (*open) (struct inode *, struct file *);
+	int (*flush) (struct file *, fl_owner_t id);
+	int (*release) (struct inode *, struct file *);
+	int (*fsync) (struct file *, loff_t, loff_t, int datasync);
+	int (*fasync) (int, struct file *, int);
+	int (*lock) (struct file *, int, struct file_lock *);
+	ssize_t (*sendpage) (struct file *, struct page *, int, size_t, loff_t *, int);
+	unsigned long (*get_unmapped_area)(struct file *, unsigned long, unsigned long, unsigned long, unsigned long);
+	int (*check_flags)(int);
+	int (*flock) (struct file *, int, struct file_lock *);
+	ssize_t (*splice_write)(struct pipe_inode_info *, struct file *, loff_t *, size_t, unsigned int);
+	ssize_t (*splice_read)(struct file *, loff_t *, struct pipe_inode_info *, size_t, unsigned int);
+	int (*setlease)(struct file *, long, struct file_lock **, void **);
+	long (*fallocate)(struct file *file, int mode, loff_t offset,
+			  loff_t len);
+	void (*show_fdinfo)(struct seq_file *m, struct file *f);
+#ifndef CONFIG_MMU
+	unsigned (*mmap_capabilities)(struct file *);
+#endif
+	ssize_t (*copy_file_range)(struct file *, loff_t, struct file *,
+			loff_t, size_t, unsigned int);
+	loff_t (*remap_file_range)(struct file *file_in, loff_t pos_in,
+				   struct file *file_out, loff_t pos_out,
+				   loff_t len, unsigned int remap_flags);
+	int (*fadvise)(struct file *, loff_t, loff_t, int);
+	int (*uring_cmd)(struct io_uring_cmd *ioucmd, unsigned int issue_flags);
+	int (*uring_cmd_iopoll)(struct io_uring_cmd *, struct io_comp_batch *,
+				unsigned int poll_flags);
+} __randomize_layout;
+```
 
-The llseek method is used to change the current read/write position in a file, and
-the new position is returned as a (positive) return value. The loff_t parameter is
+
+`loff_t (*llseek) (struct file *, loff_t, int);`
+
+The llseek method is used to change the current read/write position in a file, and the new position is returned as a (positive) return value. The loff_t parameter is
 a “long offset” and is at least 64 bits wide even on 32-bit platforms. Errors are
 signaled by a negative return value. If this function pointer is NULL, seek calls will
 modify the position counter in the file structure (described in the section “The
@@ -336,7 +368,9 @@ Used to retrieve data from the device. A null pointer in this position causes th
 read system call to fail with -EINVAL (“Invalid argument”). A nonnegative return
 value represents the number of bytes successfully read (the return value is a
 “signed size” type, usually the native integer type for the target platform).
-ssize_t (*aio_read)(struct kiocb *, char __user *, size_t, loff_t);
+
+`ssize_t (*read_iter) (struct kiocb *, struct iov_iter *);`
+old: `ssize_t (*aio_read)(struct kiocb *, char __user *, size_t, loff_t);`
 
 Initiates an asynchronous read—a read operation that might not complete
 before the function returns. If this method is NULL, all operations will be processed (synchronously) by read instead.
@@ -345,21 +379,15 @@ Sends data to the device. If NULL, -EINVAL is returned to the program calling th
 
 write system call. The return value, if nonnegative, represents the number of
 bytes successfully written.
-ssize_t (*aio_write)(struct kiocb *, const char __user *, size_t, loff_t *);
+
+`ssize_t (*write_iter) (struct kiocb *, struct iov_iter *);`
+old: `ssize_t (*aio_write)(struct kiocb *, const char __user *, size_t, loff_t *);`
 
 Initiates an asynchronous write operation on the device.
 int (*readdir) (struct file *, void *, filldir_t);
 This field should be NULL for device files; it is used for reading directories and is
 
 useful only for filesystems.
-
-50 |
-
-Chapter 3: Char Drivers
-This is the Title of the Book, eMatter Edition
-Copyright © 2005 O’Reilly & Associates, Inc. All rights reserved.
-
-,ch03.22228 Page 51 Friday, January 21, 2005 1:32 PM
 
 unsigned int (*poll) (struct file *, struct poll_table_struct *);
 
@@ -489,18 +517,20 @@ scull_open,
 This declaration uses the standard C tagged structure initialization syntax. This syntax is preferred because it makes drivers more portable across changes in the definitions of the structures and, arguably, makes the code more compact and readable.
 Tagged initialization allows the reordering of structure members; in some cases, substantial performance improvements have been realized by placing pointers to frequently accessed members in the same hardware cache line.
 
-The file Structure
-struct file, defined in <linux/fs.h>, is the second most important data structure
-used in device drivers. Note that a file has nothing to do with the FILE pointers of
-user-space programs. A FILE is defined in the C library and never appears in kernel
-code. A struct file, on the other hand, is a kernel structure that never appears in
+### The file Structure
 
-user programs.
-The file structure represents an open file. (It is not specific to device drivers; every
-open file in the system has an associated struct file in kernel space.) It is created by
-the kernel on open and is passed to any function that operates on the file, until
-the last close. After all instances of the file are closed, the kernel releases the data
-structure.
+`struct file`, defined in `<linux/fs.h>`, is the second most important data structure used in device drivers.
+Note that a file has nothing to do with the FILE pointers of user-space programs.
+A FILE is defined in the C library and never appears in kernel code.
+A struct file, on the other hand, is a kernel structure that never appears in user programs.
+
+The file structure represents an open file.
+<p id="d74c77bf5b4cc61372c8a1035f6185b03e9f614c389e9ad20357f61e3ad2aab0">
+It is not specific to device drivers; every open file in the system has an associated struct file in kernel space.
+</p>
+It is created by the kernel on open and is passed to any function that operates on the file, until the last close.
+After all instances of the file are closed, the kernel releases the data structure.
+
 In the kernel sources, a pointer to struct file is usually called either file or filp
 (“file pointer”). We’ll consistently call the pointer filp to prevent ambiguities with
 the structure itself. Thus, file refers to the structure and filp to a pointer to the

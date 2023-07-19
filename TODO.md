@@ -1,42 +1,18 @@
-## My Lines
-
 [The difference between char device and block device](lines/b18f33328e0f4b26d3a78e7e81b8d9e4427cc43da706e14fae25aebec7581862)
 
-## Building Linux kernel modules
-1. [Building and Running Modules](uMc0D.txt)
-	- [x] [Setup development environemt](mods/setup/setup.md)
-	- [ ] [kvm](NONE)
-	- [ ] [Automate development environment setup](mods/setup/setup.sh)
-	- [ ] [Diff them to find the best one](NONE)
+- [An Introduction to Device Drivers](M0Bah.md)
 
-## "Hello" Linux kernel module
-Information:
-1. [Building and Running Modules](uMc0D.txt)
+- [Building and Running Modules](uMc0D.md)
+- [x] [Setup development environemt](mods/setup/setup.md)
+- [ ] [add kvm support](NONE)
+- [ ] [Automate development environment setup](mods/setup/setup.sh)
+- [ ] [Diff them to find the best one](NONE)
+- [-] [brush unrelated stuff](mods/hello/hello.c)
 
-Implementaion:
-- [-] [zxc](mods/hello/hello.c)
+- [Char Drivers](Su0UD.md)
+- [ ] [alloc/register chdrdev region](mods/scull/chd1.c#scull_init-DEF-BLK2)
+- [ ] [grasp completely the file_operations struct](types/file_operations.h)
+  - [ ] [diff between unlocked_ioctl and compat_ioctl](mods/scull/chd1.c#scull_fops-SET)
+- [ ] [idea: check if a file has not been used for long time, cache it drive from memory (check if this already implement (how))](Su0UD.md#d74c77bf5b4cc61372c8a1035f6185b03e9f614c389e9ad20357f61e3ad2aab0)
 
-## GroupX
-
-Information:
-1. [An Introduction to Device Drivers](M0Bah.md)
-2. [Character Devices](M0Bah.md#char-devs)
-3. [Block Devices](M0Bah.md#block-devs)
-
-## GroupX
-
-Information:
-1. [Char Drivers](Su0UD.md)
-2. [The Design of scull](Su0UD.md#the-design-of-scull)
-
-## Device numbers
-
-- [Major and Minor Numbers](Su0UD.md#major-and-minor-numbers)
-- [The Internal Representaion of Device Numbers](Su0UD.md#dev-nums-impl)
-- [Allocating and Freeing Device Numbers](Su0UD.md#allocating-and-freeing-device-numbers)
-- [Dynamic Allocation of Major Numbers](Su0UD.md#dynamic-allocation-of-major-numbers)
-
-- [ ] [alloc/register chdrdev region](mods/scull/chd1.c#block1)
-
-## GroupX
-	[The Linux Device Model](gK9vS.md)
+- [The Linux Device Model](gK9vS.md)

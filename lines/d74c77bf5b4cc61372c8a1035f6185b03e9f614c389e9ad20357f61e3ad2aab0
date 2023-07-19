@@ -1,0 +1,1 @@
+It is not specific to device drivers; every open file in the system has an associated struct file in kernel space.
