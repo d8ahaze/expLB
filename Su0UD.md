@@ -538,9 +538,11 @@ As a general rule, only `i_rdev` and `i_cdev` fields of this structure are of in
 [origin](/linux/include/fs.h#inode-tDEF)
 
 `struct inode` -- used by the kernel internally to represent files.
-- `@i_rdev`:	For inodes that represent device files, this field contains the actual device number.
+- `i_rdev`:
+For inodes that represent device files, this field contains the actual device number.
+- `i_cdev`:
 <a id="06e9e90a7c0bbebe72e700e08b3b2af374c0c30bdbde6628f81fcf59016fcc2a">
-- `@i_cdev`:	Kernel's internal `struct cdev` represents char devices; this field contains a pointer to a variable of that type when the inode refers to a char device file.</a>
+Kernel's internal `struct cdev` represents char devices; this field contains a pointer to a variable of that type when the inode refers to a char device file.</a>
 
 ```c
 struct inode {
