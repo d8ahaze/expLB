@@ -574,24 +574,16 @@ static inline unsigned imajor(const struct inode *inode)
  
 ## Char Device Registration
 
-As we mentioned, the kernel uses structures of type struct cdev to represent char
-devices internally. Before the kernel invokes your device’s operations, you must allocate and register one or more of these structures.* To do so, your code should include
-<linux/cdev.h>, where the structure and its associated helper functions are defined.
+As we mentioned, the kernel uses structures of type `struct cdev` to represent char devices internally.
+Before the kernel invokes your device’s operations, you must allocate and register one or more of these structures.
+There is an older mechanism that avoids the use of cdev structures ([jump](#the-older-way).
+New code should use the newer technique, however.
+To do so, your code should include `<linux/cdev.h>`, where the structure and its associated helper functions are defined.
+
 There are two ways of allocating and initializing one of these structures. If you wish
 to obtain a standalone cdev structure at runtime, you may do so with code such as:
 struct cdev *my_cdev = cdev_alloc( );
 my_cdev->ops = &my_fops;
-
-* There is an older mechanism that avoids the use of cdev structures (which we discuss in the section “The
-Older Way”). New code should use the newer technique, however.
-
-Char Device Registration |
-This is the Title of the Book, eMatter Edition
-Copyright © 2005 O’Reilly & Associates, Inc. All rights reserved.
-
-55
-
-,ch03.22228 Page 56 Friday, January 21, 2005 1:32 PM
 
 Chances are, however, that you will want to embed the cdev structure within a
 device-specific structure of your own; that is what scull does. In that case, you should
