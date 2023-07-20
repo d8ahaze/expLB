@@ -19,7 +19,7 @@
 	- [ ] Create impl
 - [ ] Implement shell / C user prog for dynamic allocation of major numbers.
 - [ ] Understand what/how the `struct file_operations` is/works.
-	- [origin src](../q7XrZ/include/linux/fs.h#file_operations-tDEF)
+	- [origin src](origins/src1/q7XrZ/include/linux/fs.h#file_operations-tDEF)
 	- [zxc-ed src](types/file_operations.h)
 	- [zxc-ed inf](Su0UD.md#file-operations)
 	- [ ] Create var to understand diff between `unlocked_ioctl` and `compat_ioctl`

@@ -1,7 +1,6 @@
 /*
  * Keep mostly read-only and often accessed (especially for the RCU path lookup and 'stat' data) fields at the beginning of the 'struct inode'
  * struct inode -- used by the kernel internally to represent files.
- * There can be numerous variables of `struct file` type representing multiple open file descriptors on a single file, but they all point to a single variable of `struct inode` type.
  * @i_rdev:	zxc
  * @i_cdev:	asd
  */

@@ -526,7 +526,7 @@ We can safely ignore those fields, because drivers never create file structures;
 
 The `inode` structure is used by the kernel internally to represent files.
 Therefore, it is different from the file structure that represents an open file descriptor.
-There can be numerous `file` structures representing multiple open descriptors on a single file, but they all point to a single `inode` structure.
+There can be numerous variables of `struct file` type representing multiple open file descriptors on a single file, but they all point to a single variable of `struct inode` type.
 
 The `inode` structure contains a great deal of information about the file.
 As a general rule, only `i_rdev` and `i_cdev` fields of this structure are of interest for writing driver code.
@@ -537,14 +537,12 @@ As a general rule, only `i_rdev` and `i_cdev` fields of this structure are of in
 
 [origin](/linux/include/fs.h#inode-tDEF)
 
+`struct inode` -- used by the kernel internally to represent files.
+- `@i_rdev`:	For inodes that represent device files, this field contains the actual device number.
+<a id="06e9e90a7c0bbebe72e700e08b3b2af374c0c30bdbde6628f81fcf59016fcc2a">
+- `@i_cdev`:	Kernel's internal `struct cdev` represents char devices; this field contains a pointer to a variable of that type when the inode refers to a char device file.</a>
+
 ```c
-/*
- * Keep mostly read-only and often accessed (especially for the RCU path lookup and 'stat' data) fields at the beginning of the 'struct inode'
- * struct inode -- used by the kernel internally to represent files.
- * There can be numerous variables of `struct file` type representing multiple open file descriptors on a single file, but they all point to a single variable of `struct inode` type.
- * @i_rdev:	For inodes that represent device files, this field contains the actual device number.
- * @i_cdev:	Kernel's internal `struct cdev` represents char devices; this field contains a pointer to a variable of that type when the inode refers to a char device file.
- */
 struct inode {
 	dev_t			i_rdev;
 	union {
@@ -574,7 +572,7 @@ static inline unsigned imajor(const struct inode *inode)
  
 ## Char Device Registration
 
-As we mentioned, the kernel uses structures of type `struct cdev` to represent char devices internally.
+As we mentioned ([jump](#06e9e90a7c0bbebe72e700e08b3b2af374c0c30bdbde6628f81fcf59016fcc2a)), the kernel uses structures of type `struct cdev` to represent char devices internally.
 Before the kernel invokes your device’s operations, you must allocate and register one or more of these structures.
 There is an older mechanism that avoids the use of cdev structures ([jump](#the-older-way).
 New code should use the newer technique, however.
