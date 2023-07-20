@@ -2,9 +2,8 @@
 [remote](https://static.lwn.net/images/pdf/LDD3/ch01.pdf)
 ---
 
-One of the many advantages of free operating systems, as typified by Linux, is that
-their internals are open for all to view. The operating system, once a dark and mysterious area whose code was restricted to a small number of programmers, can now be
-readily examined, understood, and modified by anybody with the requisite skills.
+One of the many advantages of free operating systems, as typified by Linux, is that their internals are open for all to view.
+The operating system, once a dark and mysterious area whose code was restricted to a small number of programmers, can now be readily examined, understood, and modified by anybody with the requisite skills.
 Linux has helped to democratize operating systems. The Linux kernel remains a
 large and complex body of code, however, and would-be kernel hackers need an
 entry point where they can approach the code without being overwhelmed by complexity. Often, device drivers provide that gateway.
