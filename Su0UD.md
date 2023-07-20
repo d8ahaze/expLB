@@ -279,7 +279,7 @@ We will soon look at other important driver components, but one other digression
 Most of the fundamental driver operations involve three important kernel data structures, called `file_operations`, `file`, and `inode`.
 A basic familiarity with these structures is required to be able to do much of anything interesting, so we will now take a quick look at each of them before getting into the details of how to implement the fundamental driver operations.
 
-### File Operations
+## The `file_operations` Structure
 
 So far, we have reserved some device numbers for our use, but we have not yet connected any of our driver’s operations to those numbers.
 The `file_operations` structure is how a char driver sets up this connection.
@@ -303,7 +303,7 @@ For normal compilation, `__user` has no effect, but it can be used by external c
 The rest of the chapter, after describing some other important data structures, explains the role of the most important operations and offers hints, caveats, and real code examples.
 We defer discussion of the more complex operations to later chapters, because we aren’t ready to dig into topics such as memory management, blocking operations, and asynchronous notification quite yet.
 
-#### structure definition
+### structure definition
 
 [zxc-ed](types/file_operations.h)
 
@@ -409,7 +409,7 @@ If the device doesn’t provide an `ioctl` method, the system call returns an er
 The scull device driver implements only the most important device methods.
 Its `file_operations` structure is initialized as follows:
 
-#### usage example
+### usage example
 ```c:mods/scull/chd1.c#scull_fops-SET
 struct file_operations scull_fops = {
 	.owner =		THIS_MODULE,
@@ -426,7 +426,7 @@ This declaration uses the standard C tagged structure initialization syntax.
 This syntax is preferred because it makes drivers more portable across changes in the definitions of the structures and, arguably, makes the code more compact and readable.
 Tagged initialization allows the reordering of structure members; in some cases, substantial performance improvements have been realized by placing pointers to frequently accessed members in the same hardware cache line.
 
-### The file Structure
+## The `file` Structure
 
 `struct file`, defined in `<linux/fs.h>`, is the second most important data structure used in device drivers.
 Note that a file has nothing to do with the FILE pointers of user-space programs.
@@ -446,7 +446,7 @@ The most important fields of struct file are shown here.
 As in the previous section, the list can be skipped on a first reading.
 However, later in this chapter, when we face some real C code, we’ll discuss the fields in more detail.
 
-#### structure definition
+### structure definition
 
 [zxc-ed](types/file.h)
 
@@ -522,7 +522,7 @@ The real structure has a few more fields, but they aren’t useful to device dri
 <a id="d6cd6d061e4cc67d83d635ff975bcd371d44fb2a0655a9742beb39e597a71b95">
 We can safely ignore those fields, because drivers never create file structures; they only access structures created elsewhere.</a>
 
-### The inode Structure
+## The inode Structure
 
 The `inode` structure is used by the kernel internally to represent files.
 Therefore, it is different from the file structure that represents an open file descriptor.
@@ -531,7 +531,7 @@ There can be numerous `file` structures representing multiple open descriptors o
 The `inode` structure contains a great deal of information about the file.
 As a general rule, only `i_rdev` and `i_cdev` fields of this structure are of interest for writing driver code.
 
-#### structure definition
+### structure definition
 
 [full](types/inode.h)
 
@@ -553,7 +553,7 @@ struct inode {
 };
 ```
 
-#### macros (inlines) iminor, imajor
+### macros (inlines) iminor, imajor
 
 Should be used instead of manipulating `i_rdev` directly, since `i_rdev` type may be changed.
 
@@ -580,10 +580,27 @@ There is an older mechanism that avoids the use of cdev structures ([jump](#the-
 New code should use the newer technique, however.
 To do so, your code should include `<linux/cdev.h>`, where the structure and its associated helper functions are defined.
 
-There are two ways of allocating and initializing one of these structures. If you wish
-to obtain a standalone cdev structure at runtime, you may do so with code such as:
-struct cdev *my_cdev = cdev_alloc( );
+### The `cdev` Structure
+
+### structure definition
+
+[zxc-ed](types/file_operations.h)
+
+[origin](/linux/include/fs.h#file_operations-tDEF)
+
+```c
+/**
+ * struct file_operations -- for connection of device driver's operations to device numbers.
+ * @owner:	Pointer to the module that "owns" the structure (not an operation).
+ *
+
+There are two ways of allocating and initializing one of these structures.
+If you wish to obtain a standalone `cdev` structure at runtime, you may do so with code such as:
+
+```c
+struct cdev * my_cdev = cdev_alloc();
 my_cdev->ops = &my_fops;
+```
 
 Chances are, however, that you will want to embed the cdev structure within a
 device-specific structure of your own; that is what scull does. In that case, you should
