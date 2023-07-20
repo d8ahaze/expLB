@@ -10,17 +10,17 @@
 - [ ] [Diff them to find the best one](NONE)
 - [~] [brush unrelated stuff](mods/hello/hello.c)
 
-### 
+### Char Drivers
 
-- [Char Drivers](Su0UD.md)
+- [origin inf](Su0UD.md)
 - [ ] Understand `alloc/register_chdrdev_region` howToUse/howTheWorks
 	- [ ] Create call
 	- [zxc-ed src](mods/scull/chd1.c#scull_init-DEF-b)
 	- [ ] Create impl
 - [ ] Implement shell / C user prog for dynamic allocation of major numbers.
 - [ ] Understand what/how the `struct file_operations` is/works.
-	- [zxc-ed src](types/file_operations.h)
 	- [origin src](../q7XrZ/include/linux/fs.h#file_operations-tDEF)
+	- [zxc-ed src](types/file_operations.h)
 	- [zxc-ed inf](Su0UD.md#file-operations)
 	- [ ] Create var to understand diff between `unlocked_ioctl` and `compat_ioctl`
 		- [zxc-ed src](mods/scull/chd1.c#scull_fops-SET)
@@ -36,3 +36,8 @@
 
 ### 
 - [The Linux Device Model](gK9vS.md)
+
+### useradd
+- [ ] Understand what/how the /etc/subuid /etc/subgid is/works.
+	- [origin src](/etc/subuid)
+	- [origin src](/etc/sbugid)
