@@ -12,11 +12,23 @@
 
 ### 
 - [Char Drivers](Su0UD.md)
-- [ ] [alloc/register chdrdev region](mods/scull/chd1.c#scull_init-DEF-BLK2)
+- [ ] [alloc/register chdrdev region](mods/scull/chd1.c#scull_init-DEF-b)
+- [ ] Implement shell / `C` user prog for dynamic allocation of major numbers.
 - [ ] [grasp completely the file_operations struct](types/file_operations.h)
   - [ ] [diff between unlocked_ioctl and compat_ioctl](mods/scull/chd1.c#scull_fops-SET)
-- [ ] [idea: check if a file has not been used for long time, cache it drive from memory (check if this already implement (how))](Su0UD.md#d74c77bf5b4cc61372c8a1035f6185b03e9f614c389e9ad20357f61e3ad2aab0)
+- [ ] Idea: check if a file has not been used for long time, cache it drive from memory (check if this already implement (how))
 
-<a href="Su0UD.md#d74c77bf5b4cc61372c8a1035f6185b03e9f614c389e9ad20357f61e3ad2aab0">check-ref-extern</a>
+  [zxc-ed inf](Su0UD.md#d74c77bf5b4cc61372c8a1035f6185b03e9f614c389e9ad20357f61e3ad2aab0)
 
+- [x] Understand what/how the `struct file @ f_op` is/works.
+
+	[zxc-ed src](types/file.h#file-tDEF-f_op)
+	- [ ] Implement according to you understanding and grasp details.
+
+- [ ] What does mean driver isn't notified (open of `file_operations`)?
+    [zxc-ed src](types/file_operations.h)
+    [origin src](/linux/include/linux/fs.h)
+	[zxc-ed inf](Su0UD.md#file_operations-DEF)
+
+### 
 - [The Linux Device Model](gK9vS.md)
