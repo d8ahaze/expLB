@@ -17,7 +17,7 @@ MOD_DIR ?= $(shell pwd)
 # for details.
 # ifneq (arg1, arg2) -- make syntax. In this case evaluate if not empty.
 ifneq ($(KERNELRELEASE),)
-	obj-m := chd1.o
+	obj-m := cdd1.o
 else
 default:
 	# stackoverflow.com/q/21177935
